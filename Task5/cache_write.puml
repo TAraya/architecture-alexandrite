@@ -1,0 +1,14 @@
+@startuml
+
+actor "Приложение" as app
+participant "Кеш" as cache
+participant "БД" as db
+
+app -> cache: Изменение статуса заказа
+activate cache
+cache -> db: Запрос на изменение статуса в БД
+activate db
+db -->> cache: Изменение статуса в кеше если заказ подлежит кешированию
+deactivate db
+cache -->> app: Возврат статуса
+deactivate cache

@@ -1,0 +1,21 @@
+@startuml
+
+actor "Приложение" as app
+participant "Кеш" as cache
+participant "БД" as db
+
+app -> cache: Запрос страницы заказов
+activate cache
+opt "Данные запрашиваемых страниц не загружены в кэш"
+  cache -> db: Запрос некешированной части данных
+  activate db
+  db -->> cache: Возврат запрошенных данных и кеширование n-первых страниц
+  deactivate db
+end
+cache -->> app: Возврат страницы заказов
+deactivate cache
+
+app -> cache: Запрос страницы заказов
+activate cache
+cache -->> app: Возврат страницы заказов
+deactivate cache
